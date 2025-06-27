@@ -4588,3 +4588,89 @@ a.btn--demo {
     position: relative !important;
     z-index: 25 !important;
 }
+/* MEJORÉ: Transiciones más rápidas */
+.nav__toggle {
+    transition: all var(--transition-fast); /* Era var(--transition) */
+}
+
+.nav__toggle-line {
+    transition: all var(--transition-fast); /* Era var(--transition) */
+}
+/* CAMBIÉ: Transición más rápida para móvil */
+.btn--primary,
+.btn--cta,
+.btn--cta-video,
+.btn--footer {
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+    /* Era: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) */
+}
+
+/* CAMBIÉ: Efectos hover más suaves para móvil */
+.btn--primary:hover,
+.btn--cta:hover,
+.btn--cta-video:hover,
+.btn--footer:hover {
+    transform: translateY(-3px) scale(1.03) translateZ(0) !important;
+    /* Era: translateY(-4px) scale(1.05) */
+}
+
+/* CAMBIÉ: Estados activos más suaves */
+.btn--primary:active,
+.btn--cta:active,
+.btn--cta-video:active,
+.btn--footer:active {
+    transform: translateY(-1px) scale(1.01) translateZ(0) !important;
+    /* Era: translateY(-2px) scale(1.02) */
+}
+/* CAMBIÉ: Transición más rápida */
+.btn--primary::before,
+.btn--cta::before,
+.btn--cta-video::before,
+.btn--footer::before {
+    transition: left 1s ease !important; /* Era: 1.2s ease */
+}
+
+/* CAMBIÉ: Transición del anillo exterior más rápida */
+.btn--primary::after,
+.btn--cta::after,
+.btn--cta-video::after,
+.btn--footer::after {
+    transition: opacity 0.3s ease !important; /* Era: 0.4s ease */
+}
+/* NUEVA IMPLEMENTACIÓN COMPLETA: */
+@media (max-width: 1024px) {
+    .nav__menu {
+        /* CAMBIÉ: Transición más fluida */
+        transition: left 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        /* Era: left 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) */
+        
+        /* AGREGUÉ: Centrado perfecto */
+        justify-content: center;
+        align-items: center;
+        gap: var(--space-lg);
+        
+        /* AGREGUÉ: Sin scroll forzado */
+        overflow: hidden;
+        -webkit-overflow-scrolling: auto;
+    }
+
+    .nav__link {
+        /* CAMBIÉ: Transición ultra fluida */
+        transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        /* Era: all var(--transition) */
+        
+        /* CAMBIÉ: Efectos hover más suaves */
+        transform: translateY(-1px) scale(1.02); /* Era: translateY(-2px) scale(1.02) */
+    }
+}
+/* AGREGUÉ: Hardware acceleration para elementos móviles */
+.nav__menu,
+.nav__toggle,
+.nav__close,
+.nav__link,
+.nav__language-option,
+.btn--mobile {
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}

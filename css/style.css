@@ -4663,14 +4663,3 @@ a.btn--demo {
         transform: translateY(-1px) scale(1.02); /* Era: translateY(-2px) scale(1.02) */
     }
 }
-/* AGREGUÉ: Hardware acceleration para elementos móviles */
-.nav__menu,
-.nav__toggle,
-.nav__close,
-.nav__link,
-.nav__language-option,
-.btn--mobile {
-    will-change: transform;
-    transform: translateZ(0);
-    backface-visibility: hidden;
-}

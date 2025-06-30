@@ -80,6 +80,14 @@
 --section-padding-x: clamp(1rem, 5vw, 8rem);
 --section-padding-y: clamp(3rem, 8vh, 8rem);
 
+/* NUEVAS VARIABLES PARA RESTRICCIONES DE ANCHO MÁXIMO */
+--max-content-width: 1400px;
+--max-hero-width: 1600px;
+--max-features-width: 1500px;
+--max-videos-width: 1200px;
+--max-faq-width: 1000px;
+--max-contact-width: 1200px;
+
 /* Transiciones unificadas */
 --transition: 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 --transition-fast: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -156,6 +164,54 @@ margin: 0;
 padding: 0;
 }
 
+/* ===== CONTENEDORES CON RESTRICCIONES DE ANCHO MÁXIMO ===== */
+.hero__container,
+.features__header,
+.features__grid,
+.videos__header,
+.videos__main-container,
+.videos__cta,
+.faq__header,
+.faq__container,
+.contact__header,
+.contact__grid,
+.contact__footer-content {
+max-width: var(--max-content-width);
+margin-left: auto;
+margin-right: auto;
+width: 100%;
+}
+
+/* Restricciones específicas por sección */
+.hero__container {
+max-width: var(--max-hero-width);
+}
+
+.features__header,
+.features__grid {
+max-width: var(--max-features-width);
+}
+
+.videos__header,
+.videos__main-container,
+.videos__cta {
+max-width: var(--max-videos-width);
+}
+
+.faq__header,
+.faq__container {
+max-width: var(--max-faq-width);
+}
+
+.contact__header,
+.contact__grid {
+max-width: var(--max-contact-width);
+}
+
+.contact__footer-content {
+max-width: var(--max-content-width);
+}
+
 /* ===== CLASES DE UTILIDAD PARA MOSTRAR/OCULTAR ===== */
 .mobile-only {
 display: none;
@@ -175,7 +231,7 @@ display: none;
 }
 }
 
-/* ===== OPTIMIZACIÓN DE IMÁGENES UNIFICADA ===== */
+/* ===== OPTIMIZACIÓN DE IMÁGENES UNIFICADA - SIN HOVER ===== */
 .image-optimized,
 .hero__phone-app-image,
 .phone__app-image {
@@ -243,7 +299,7 @@ font-size: 0.9rem;
 content: '⚠️ Error cargando imagen';
 }
 
-/* Optimización específica para imágenes de celular */
+/* Optimización específica para imágenes de celular - SIN HOVER */
 .hero__phone-app-image,
 .phone__app-image {
 width: 100%;
@@ -327,9 +383,11 @@ position: relative;
 pointer-events: none;
 width: 100%;
 overflow: visible;
+max-width: var(--max-content-width);
+margin: 0 auto;
 }
 
-/* ===== LOGO FLOTANTE OPTIMIZADO ===== */
+/* ===== LOGO FLOTANTE OPTIMIZADO - SIN HOVER ===== */
 .nav__brand {
 pointer-events: auto;
 z-index: calc(var(--navbar-z-index) + 1);
@@ -343,7 +401,7 @@ background-repeat: no-repeat;
 background-position: center;
 border-radius: 12px;
 position: relative;
-transition: all var(--transition);
+transition: none;
 cursor: pointer;
 filter: drop-shadow(0 8px 25px rgba(0, 0, 0, 0.3));
 background-image: url('../assets/logo.avif');
@@ -351,11 +409,6 @@ image-rendering: -webkit-optimize-contrast;
 image-rendering: crisp-edges;
 transform: translateZ(0);
 backface-visibility: hidden;
-}
-
-.nav__logo:hover {
-transform: translateY(-3px) scale(1.05);
-filter: drop-shadow(0 12px 35px rgba(0, 0, 0, 0.4));
 }
 
 .nav__logo:focus {
@@ -1453,7 +1506,7 @@ position: relative;
 z-index: 2;
 }
 
-/* ===== BOTONES DE DESCARGA OPTIMIZADOS ===== */
+/* ===== BOTONES DE DESCARGA OPTIMIZADOS - SIN HOVER ===== */
 .hero__download {
 display: flex;
 gap: var(--space-xl);
@@ -1465,7 +1518,7 @@ width: 100%;
 
 .download-btn {
 display: inline-block;
-transition: all var(--transition);
+transition: none;
 position: relative;
 overflow: visible;
 text-decoration: none;
@@ -1474,16 +1527,11 @@ filter: drop-shadow(0 8px 25px rgba(0, 0, 0, 0.3));
 flex-shrink: 0;
 }
 
-.download-btn:hover {
-transform: translateY(-5px) scale(1.05);
-filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.4)) brightness(1.1);
-}
-
 .download-btn__image {
 height: 60px;
 width: auto;
 display: block;
-transition: all var(--transition);
+transition: none;
 image-rendering: -webkit-optimize-contrast;
 image-rendering: crisp-edges;
 image-rendering: high-quality;
@@ -1515,10 +1563,6 @@ background-image: url('../assets/AppleStore.avif');
 background-size: contain;
 background-repeat: no-repeat;
 background-position: center;
-}
-
-.download-btn:hover .download-btn__image {
-filter: drop-shadow(0 8px 25px rgba(0, 0, 0, 0.3)) brightness(1.05) contrast(1.08) saturate(1.1);
 }
 
 .hero__trust {
@@ -1570,7 +1614,7 @@ filter: brightness(1.02) contrast(1.05) saturate(1.08);
 display: none !important;
 }
 
-/* ===== TELÉFONO HERO OPTIMIZADO - SOLO DESKTOP ===== */
+/* ===== TELÉFONO HERO OPTIMIZADO - SOLO DESKTOP - SIN HOVER ===== */
 .hero__media {
 display: flex;
 justify-content: center;
@@ -1583,7 +1627,7 @@ width: 100%;
 .hero__phone-container {
 position: relative;
 transform: perspective(1200px) rotateY(-8deg) rotateX(2deg);
-transition: transform var(--transition-slow);
+transition: none;
 }
 
 .hero__phone {
@@ -1686,7 +1730,7 @@ display: block;
 z-index: 2;
 }
 
-/* ===== SECCIÓN CARACTERÍSTICAS OPTIMIZADA ===== */
+/* ===== SECCIÓN CARACTERÍSTICAS OPTIMIZADA - SIN HOVER ===== */
 .features {
 padding: var(--section-padding-y) var(--section-padding-x);
 position: relative;
@@ -1835,7 +1879,7 @@ margin-bottom: var(--space-lg);
 font-size: 1.1rem;
 color: var(--text-secondary);
 padding: var(--space-sm) 0;
-transition: all var(--transition);
+transition: none;
 line-height: 1.6;
 text-align: left;
 border-radius: 8px;
@@ -1854,7 +1898,7 @@ animation: pulse-gentle 4s infinite;
 margin-top: 8px;
 }
 
-/* ===== TELÉFONOS DE CARACTERÍSTICAS - DESKTOP Y MÓVIL ===== */
+/* ===== TELÉFONOS DE CARACTERÍSTICAS - DESKTOP Y MÓVIL - SIN HOVER ===== */
 .feature__phone {
 position: relative;
 width: var(--phone-width-desktop);
@@ -2096,26 +2140,6 @@ border-radius: var(--phone-border-radius);
         margin-bottom: var(--space-md) !important;
         padding: var(--space-sm) 0 !important;
         text-align: left !important;
-    }
-    
-    /* ===== ELIMINAR HOVER EFFECTS EN MÓVIL ===== */
-    .feature__list-item:hover {
-        transform: none !important;
-        background: transparent !important;
-        padding-left: 0 !important;
-        color: var(--text-secondary) !important;
-    }
-    
-    .phone:hover {
-        transform: none !important;
-        box-shadow: 
-            0 15px 40px rgba(0, 0, 0, 0.3),
-            0 5px 15px rgba(0, 0, 0, 0.2),
-            0 0 0 1px rgba(255, 255, 255, 0.08) !important;
-    }
-    
-    .feature__phone:hover::before {
-        opacity: 0.6 !important;
     }
     
     /* ===== AJUSTAR GRID DE CARACTERÍSTICAS ===== */
@@ -4383,3 +4407,59 @@ color: var(--text-primary);
 background: var(--starflex-crimson);
 color: var(--text-primary);
 }
+
+.videos__cta,
+.videos__cta-content,
+.videos__cta-buttons,
+.videos__cta-buttons .btn,
+.videos__cta-buttons a {
+    pointer-events: auto !important;
+    position: relative !important;
+    z-index: 10 !important;
+    cursor: pointer !important;
+}
+
+.btn--primary,
+.btn--cta,
+.btn--cta-video,
+.btn--secondary,
+.btn--demo,
+.btn--footer {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    position: relative !important;
+    z-index: 5 !important;
+}
+
+a.btn,
+a.btn--primary,
+a.btn--cta,
+a.btn--cta-video,
+a.btn--secondary,
+a.btn--demo,
+a.btn--footer {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    display: inline-flex !important;
+    text-decoration: none !important;
+    position: relative !important;
+    z-index: 10 !important;
+}
+
+.hero__cta-group,
+.hero__cta-group .btn,
+.hero__cta-group a {
+    pointer-events: auto !important;
+    position: relative !important;
+    z-index: 5 !important;
+}
+
+.download-btn,
+.download-btn--google,
+.download-btn--app-store {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    position: relative !important;
+    z-index: 5 !important;
+}
+

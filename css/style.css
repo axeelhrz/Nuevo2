@@ -8794,3 +8794,2152 @@ body.no-scroll {
 
 El drawer ahora es perfecto: sin scroll, sin superposiciones, completamente responsive y visualmente espectacular.
 */
+/* ===== CORRECCIÓN PARA EL DRAWER MÓVIL Y OVERLAY ===== */
+
+@media screen and (max-width: 1023px) {
+    /* ===== VARIABLES PARA EL OVERLAY ===== */
+    :root {
+        --drawer-overlay-bg: rgba(0, 0, 0, 0.7);
+        --drawer-overlay-blur: 5px;
+        --drawer-z-index: 1000;
+        --drawer-cta-z-index: 999;
+    }
+
+    /* ===== OVERLAY PARA DIFUMINAR EL FONDO ===== */
+    .nav__menu::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        height: 100dvh;
+        background: var(--drawer-overlay-bg);
+        backdrop-filter: blur(var(--drawer-overlay-blur));
+        -webkit-backdrop-filter: blur(var(--drawer-overlay-blur));
+        z-index: -1;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                    visibility 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        pointer-events: none;
+    }
+
+    .nav__menu.active::before {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+    }
+
+    /* ===== ASEGURAR QUE EL CTA NO QUEDE POR ENCIMA DEL DRAWER ===== */
+    .nav__cta {
+        z-index: var(--drawer-cta-z-index) !important;
+    }
+
+    .nav__menu {
+        z-index: var(--drawer-z-index) !important;
+    }
+
+    /* ===== ASEGURAR QUE EL BOTÓN DE TOGGLE QUEDE POR ENCIMA DEL OVERLAY ===== */
+    .nav__toggle {
+        z-index: calc(var(--drawer-z-index) + 1) !important;
+    }
+
+    /* ===== ASEGURAR QUE EL BOTÓN DE CERRAR QUEDE POR ENCIMA DEL DRAWER ===== */
+    .nav__close {
+        z-index: calc(var(--drawer-z-index) + 2) !important;
+    }
+
+    /* ===== MEJORAR LA TRANSICIÓN DEL DRAWER ===== */
+    .nav__menu {
+        transition: left 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+    }
+
+    /* ===== PREVENIR SCROLL DEL BODY CUANDO EL DRAWER ESTÁ ABIERTO ===== */
+    body.no-scroll {
+        overflow: hidden !important;
+        position: fixed !important;
+        width: 100% !important;
+        height: 100% !important;
+    }
+}
+
+/* ===== OPTIMIZACIONES PARA DISPOSITIVOS DE BAJA POTENCIA ===== */
+@media (prefers-reduced-motion: reduce) and (max-width: 1023px) {
+    .nav__menu::before {
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+}
+/* ===== CORRECCIONES CSS PARA EL DRAWER MÓVIL - PRESERVAR SCROLL ===== */
+
+/* Aplicar solo en dispositivos móviles */
+@media screen and (max-width: 1023px) {
+
+/* ===== PREVENIR SCROLL DEL BODY CUANDO EL DRAWER ESTÁ ABIERTO ===== */
+body.no-scroll {
+    /* Usar position fixed en lugar de overflow hidden para preservar scroll */
+    position: fixed !important;
+    width: 100% !important;
+    overflow-y: scroll !important; /* Mantener scrollbar para evitar saltos */
+    -webkit-overflow-scrolling: touch !important;
+}
+
+/* ===== ASEGURAR QUE EL OVERLAY NO INTERFIERA CON EL SCROLL ===== */
+.nav__menu::before {
+    /* El overlay debe cubrir toda la pantalla pero no afectar el scroll */
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    background: rgba(0, 0, 0, 0.7) !important;
+    backdrop-filter: blur(5px) !important;
+    -webkit-backdrop-filter: blur(5px) !important;
+    z-index: -1 !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transition: opacity 0.4s ease, visibility 0.4s ease !important;
+    pointer-events: none !important;
+    /* No debe afectar el layout del documento */
+    contain: layout style paint !important;
+}
+
+.nav__menu.active::before {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+}
+
+/* ===== DRAWER PRINCIPAL - OPTIMIZADO PARA PRESERVAR SCROLL ===== */
+.nav__menu {
+    /* Posicionamiento que no afecta el scroll del documento */
+    position: fixed !important;
+    top: 0 !important;
+    left: -100% !important;
+    width: min(320px, 85vw) !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    z-index: 1000 !important;
+    
+    /* Transición suave */
+    transition: left 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+    
+    /* No debe afectar el layout del documento */
+    contain: layout style paint !important;
+    will-change: transform !important;
+    transform: translateZ(0) !important;
+    backface-visibility: hidden !important;
+}
+
+.nav__menu.active {
+    left: 0 !important;
+}
+
+/* ===== ENLACES ACTIVOS - MEJORAR VISIBILIDAD ===== */
+.nav__link.active {
+    /* Hacer más visible el enlace activo */
+    background: rgba(255, 45, 85, 0.2) !important;
+    border-left-color: var(--starflex-red) !important;
+    color: var(--starflex-red) !important;
+    transform: translateX(12px) !important;
+    box-shadow: 
+        0 0 20px rgba(255, 45, 85, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+    text-shadow: 0 0 10px rgba(255, 45, 85, 0.5) !important;
+}
+
+.nav__link.active::before {
+    width: 100% !important;
+    background: linear-gradient(90deg, 
+        rgba(255, 45, 85, 0.25) 0%, 
+        rgba(255, 45, 85, 0.15) 100%
+    ) !important;
+    opacity: 1 !important;
+}
+
+.nav__link.active::after {
+    opacity: 1 !important;
+    transform: translateX(0) !important;
+    color: var(--starflex-red) !important;
+    text-shadow: 0 0 8px rgba(255, 45, 85, 0.6) !important;
+}
+
+/* ===== TRANSICIONES SUAVES PARA CAMBIOS DE ESTADO ===== */
+.nav__link {
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+}
+
+.nav__link::before {
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+}
+
+.nav__link::after {
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+}
+
+/* ===== OPTIMIZACIONES PARA DISPOSITIVOS DE BAJO RENDIMIENTO ===== */
+@media (prefers-reduced-motion: reduce) {
+    .nav__menu {
+        transition: left 0.2s ease !important;
+    }
+    
+    .nav__menu::before {
+        transition: opacity 0.2s ease, visibility 0.2s ease !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+    
+    .nav__link,
+    .nav__link::before,
+    .nav__link::after {
+        transition: all 0.2s ease !important;
+    }
+}
+
+/* ===== CORRECCIONES PARA DIFERENTES ALTURAS DE PANTALLA ===== */
+@media screen and (max-height: 600px) {
+    /* En pantallas pequeñas, asegurar que el drawer sea completamente visible */
+    .nav__menu {
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+}
+
+/* ===== CORRECCIONES PARA WEBKIT (SAFARI) ===== */
+@supports (-webkit-appearance: none) {
+    body.no-scroll {
+        -webkit-overflow-scrolling: touch !important;
+    }
+    
+    .nav__menu {
+        -webkit-transform: translateZ(0) !important;
+        transform: translateZ(0) !important;
+        -webkit-backface-visibility: hidden !important;
+        backface-visibility: hidden !important;
+    }
+}
+
+/* ===== CORRECCIONES PARA DISPOSITIVOS CON NOTCH ===== */
+@supports (padding: max(0px)) {
+    .nav__menu {
+        padding-left: max(20px, env(safe-area-inset-left)) !important;
+        padding-right: max(20px, env(safe-area-inset-right)) !important;
+    }
+}
+
+/* ===== ASEGURAR QUE NO HAY CONFLICTOS CON OTROS ELEMENTOS ===== */
+.nav__toggle,
+.nav__close {
+    /* Asegurar que los botones estén por encima del overlay */
+    z-index: 1001 !important;
+    position: relative !important;
+}
+
+/* ===== CORRECCIÓN PARA EVITAR SALTOS VISUALES ===== */
+html {
+    /* Asegurar que el scroll sea suave en toda la página */
+    scroll-behavior: smooth !important;
+    overflow-x: hidden !important;
+}
+
+body {
+    /* Evitar saltos horizontales */
+    overflow-x: hidden !important;
+    min-height: 100vh !important;
+    min-height: 100dvh !important;
+}
+
+/* ===== CORRECCIÓN PARA MANTENER EL ANCHO DURANTE EL FIXED ===== */
+body.no-scroll {
+    /* Mantener el ancho exacto para evitar saltos de layout */
+    width: 100vw !important;
+    max-width: 100vw !important;
+    box-sizing: border-box !important;
+}
+
+}
+
+/* ===== CORRECCIONES GENERALES PARA TODOS LOS DISPOSITIVOS ===== */
+
+/* Asegurar que los enlaces de navegación sean clickeables */
+.nav__link {
+    cursor: pointer !important;
+    user-select: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+    touch-action: manipulation !important;
+}
+
+/* Mejorar la accesibilidad del drawer */
+.nav__menu[aria-hidden="true"] {
+    pointer-events: none !important;
+}
+
+.nav__menu[aria-hidden="false"] {
+    pointer-events: auto !important;
+}
+
+/* Asegurar que las animaciones no interfieran con el scroll */
+@keyframes slideInFromLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Optimización para dispositivos táctiles */
+@media (hover: none) and (pointer: coarse) {
+    .nav__link:hover {
+        /* Remover efectos hover en dispositivos táctiles */
+        background: transparent !important;
+        transform: none !important;
+    }
+    
+    .nav__link:active {
+        /* Efecto de toque más sutil */
+        background: rgba(255, 45, 85, 0.1) !important;
+        transform: translateX(4px) !important;
+    }
+}
+
+/* ===== MEJORA COMPLETA DEL SELECTOR DE IDIOMA DEL DRAWER MÓVIL ===== */
+/* Diseño 100% perfecto que sigue la línea del drawer sin romper efectos */
+
+/* Aplicar solo en dispositivos móviles */
+@media screen and (max-width: 1023px) {
+
+/* ===== VARIABLES ESPECÍFICAS PARA EL SELECTOR DE IDIOMA MEJORADO ===== */
+:root {
+    /* Colores que siguen la línea del drawer */
+    --language-bg: linear-gradient(135deg, 
+        rgba(255, 45, 85, 0.08) 0%,
+        rgba(255, 255, 255, 0.05) 30%,
+        rgba(30, 35, 48, 0.85) 70%,
+        rgba(21, 25, 34, 0.9) 100%
+    );
+    --language-border: rgba(255, 45, 85, 0.25);
+    --language-border-hover: rgba(255, 45, 85, 0.4);
+    --language-glow: 0 0 20px rgba(255, 45, 85, 0.2);
+    --language-glow-hover: 0 0 30px rgba(255, 45, 85, 0.3);
+    --language-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    --language-shadow-hover: 0 12px 35px rgba(0, 0, 0, 0.3);
+}
+
+/* ===== CONTENEDOR PRINCIPAL DEL SELECTOR DE IDIOMA ===== */
+.nav__language-mobile {
+    /* Posicionamiento perfecto sin superposiciones */
+    width: 100% !important;
+    margin: 0 0 var(--drawer-gap, 1rem) 0 !important;
+    padding: var(--drawer-padding, 1.5rem) !important;
+    
+    /* Espacio para el botón de cerrar */
+    padding-top: calc(var(--drawer-padding, 1.5rem) + 50px) !important;
+    
+    /* Fondo que sigue la línea del drawer */
+    background: var(--language-bg) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    
+    /* Bordes elegantes */
+    border: 1px solid var(--language-border) !important;
+    border-radius: 20px !important;
+    
+    /* Sombras que complementan el drawer */
+    box-shadow: 
+        var(--language-shadow),
+        var(--language-glow),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+    
+    /* Transición suave */
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+    
+    /* Layout perfecto */
+    position: relative !important;
+    overflow: hidden !important;
+    flex-shrink: 0 !important;
+    box-sizing: border-box !important;
+}
+
+/* Efecto de brillo sutil que sigue la estética del drawer */
+.nav__language-mobile::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: -100% !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(255, 45, 85, 0.1) 50%, 
+        transparent 100%
+    ) !important;
+    transition: left 1.5s ease !important;
+    display: block !important;
+    opacity: 1 !important;
+    border-radius: 20px !important;
+}
+
+.nav__language-mobile:hover::before {
+    left: 100% !important;
+}
+
+/* Estado hover que mantiene la coherencia */
+.nav__language-mobile:hover {
+    border-color: var(--language-border-hover) !important;
+    box-shadow: 
+        var(--language-shadow-hover),
+        var(--language-glow-hover),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+    transform: translateY(-1px) !important;
+}
+
+/* ===== TÍTULO DEL SELECTOR DE IDIOMA ===== */
+.nav__language-title {
+    /* Tipografía que sigue la línea del drawer */
+    color: var(--starflex-red) !important;
+    font-size: clamp(0.75rem, 2.5vw, 0.9rem) !important;
+    font-weight: 700 !important;
+    text-align: center !important;
+    margin-bottom: var(--drawer-gap, 1rem) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    
+    /* Efecto de texto que complementa el drawer */
+    text-shadow: 0 0 10px rgba(255, 45, 85, 0.4) !important;
+    
+    /* Transición suave */
+    transition: all 0.3s ease !important;
+}
+
+.nav__language-mobile:hover .nav__language-title {
+    color: var(--starflex-red-bright, #ff4569) !important;
+    text-shadow: 0 0 15px rgba(255, 45, 85, 0.6) !important;
+}
+
+/* ===== CONTENEDOR DE OPCIONES DE IDIOMA ===== */
+.nav__language-options {
+    display: flex !important;
+    gap: var(--drawer-gap, 1rem) !important;
+    width: 100% !important;
+}
+
+/* ===== OPCIONES DE IDIOMA INDIVIDUALES ===== */
+.nav__language-option {
+    /* Layout que sigue la línea del drawer */
+    flex: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.5rem !important;
+    
+    /* Tamaño adaptativo */
+    padding: clamp(0.75rem, 3vh, 1rem) clamp(1rem, 4vw, 1.25rem) !important;
+    min-height: var(--drawer-button-height, 44px) !important;
+    
+    /* Diseño que complementa los enlaces del drawer */
+    background: rgba(255, 255, 255, 0.08) !important;
+    backdrop-filter: blur(15px) !important;
+    -webkit-backdrop-filter: blur(15px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 16px !important;
+    
+    /* Tipografía consistente */
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-size: clamp(0.75rem, 2.5vw, 0.85rem) !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    
+    /* Interactividad */
+    cursor: pointer !important;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+    
+    /* Sombras sutiles */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    
+    /* Layout perfecto */
+    position: relative !important;
+    overflow: hidden !important;
+    user-select: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+    touch-action: manipulation !important;
+}
+
+/* Efecto de línea inferior animada que sigue el estilo del drawer */
+.nav__language-option::before {
+    content: '' !important;
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 50% !important;
+    width: 0 !important;
+    height: 2px !important;
+    background: linear-gradient(90deg, 
+        var(--starflex-red) 0%, 
+        rgba(255, 45, 85, 0.8) 100%
+    ) !important;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+    transform: translateX(-50%) !important;
+    border-radius: 1px !important;
+    display: block !important;
+    opacity: 1 !important;
+}
+
+/* Efecto de brillo deslizante */
+.nav__language-option::after {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: -100% !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(255, 45, 85, 0.1) 50%, 
+        transparent 100%
+    ) !important;
+    transition: left 0.8s ease !important;
+    border-radius: 16px !important;
+    display: block !important;
+    opacity: 1 !important;
+}
+
+/* ===== ESTADOS HOVER DE LAS OPCIONES ===== */
+.nav__language-option:hover,
+.nav__language-option:active {
+    /* Transformación que sigue la línea del drawer */
+    background: rgba(255, 45, 85, 0.15) !important;
+    border-color: rgba(255, 45, 85, 0.4) !important;
+    color: #ffffff !important;
+    transform: translateY(-2px) scale(1.02) !important;
+    
+    /* Sombras mejoradas */
+    box-shadow: 
+        0 8px 20px rgba(0, 0, 0, 0.2),
+        0 0 20px rgba(255, 45, 85, 0.3) !important;
+}
+
+.nav__language-option:hover::before,
+.nav__language-option:active::before {
+    width: 80% !important;
+}
+
+.nav__language-option:hover::after,
+.nav__language-option:active::after {
+    left: 100% !important;
+}
+
+/* ===== ESTADO ACTIVO DE LAS OPCIONES ===== */
+.nav__language-option.active {
+    /* Estilo que destaca siguiendo la línea del drawer */
+    background: rgba(255, 45, 85, 0.25) !important;
+    border-color: rgba(255, 45, 85, 0.6) !important;
+    color: var(--starflex-red) !important;
+    
+    /* Sombras especiales para el estado activo */
+    box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.3),
+        0 0 25px rgba(255, 45, 85, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+    
+    /* Efecto de texto */
+    text-shadow: 0 0 10px rgba(255, 45, 85, 0.5) !important;
+}
+
+.nav__language-option.active::before {
+    width: 90% !important;
+    background: linear-gradient(90deg, 
+        var(--starflex-red) 0%, 
+        rgba(255, 45, 85, 1) 100%
+    ) !important;
+    box-shadow: 0 0 8px rgba(255, 45, 85, 0.6) !important;
+}
+
+/* ===== BANDERAS Y NOMBRES DE IDIOMA ===== */
+.nav__language-flag {
+    font-size: 1.1rem !important;
+    line-height: 1 !important;
+    transition: all 0.3s ease !important;
+}
+
+.nav__language-name {
+    font-weight: 700 !important;
+    transition: all 0.3s ease !important;
+}
+
+.nav__language-option:hover .nav__language-flag,
+.nav__language-option:hover .nav__language-name {
+    transform: scale(1.05) !important;
+}
+
+.nav__language-option.active .nav__language-flag,
+.nav__language-option.active .nav__language-name {
+    transform: scale(1.1) !important;
+}
+
+/* ===== ANIMACIÓN DE ENTRADA QUE SIGUE LA LÍNEA DEL DRAWER ===== */
+.nav__menu.active .nav__language-mobile {
+    animation: languageSelectorSlideIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s both;
+}
+
+@keyframes languageSelectorSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+}
+
+/* ===== RESPONSIVE PARA DIFERENTES TAMAÑOS ===== */
+
+/* Pantallas medianas */
+@media screen and (max-height: 700px) and (min-height: 600px) {
+    .nav__language-mobile {
+        padding: var(--drawer-padding, 1.25rem) !important;
+        padding-top: calc(var(--drawer-padding, 1.25rem) + 45px) !important;
+    }
+    
+    .nav__language-title {
+        font-size: clamp(0.7rem, 2.2vw, 0.85rem) !important;
+        margin-bottom: calc(var(--drawer-gap, 1rem) * 0.75) !important;
+    }
+    
+    .nav__language-option {
+        padding: clamp(0.625rem, 2.5vh, 0.875rem) clamp(0.875rem, 3.5vw, 1.125rem) !important;
+        min-height: 40px !important;
+    }
+}
+
+/* Pantallas pequeñas */
+@media screen and (max-height: 600px) {
+    .nav__language-mobile {
+        padding: var(--drawer-padding, 1rem) !important;
+        padding-top: calc(var(--drawer-padding, 1rem) + 40px) !important;
+    }
+    
+    .nav__language-title {
+        font-size: clamp(0.65rem, 2vw, 0.8rem) !important;
+        margin-bottom: calc(var(--drawer-gap, 1rem) * 0.5) !important;
+    }
+    
+    .nav__language-option {
+        padding: clamp(0.5rem, 2vh, 0.75rem) clamp(0.75rem, 3vw, 1rem) !important;
+        min-height: 36px !important;
+        font-size: clamp(0.7rem, 2.2vw, 0.8rem) !important;
+    }
+}
+
+/* Pantallas muy pequeñas */
+@media screen and (max-height: 500px) {
+    .nav__language-mobile {
+        padding: var(--drawer-padding, 0.875rem) !important;
+        padding-top: calc(var(--drawer-padding, 0.875rem) + 35px) !important;
+    }
+    
+    .nav__language-title {
+        font-size: clamp(0.6rem, 1.8vw, 0.75rem) !important;
+        margin-bottom: calc(var(--drawer-gap, 1rem) * 0.375) !important;
+    }
+    
+    .nav__language-option {
+        padding: clamp(0.375rem, 1.5vh, 0.625rem) clamp(0.625rem, 2.5vw, 0.875rem) !important;
+        min-height: 32px !important;
+        font-size: clamp(0.65rem, 2vw, 0.75rem) !important;
+    }
+    
+    .nav__language-name {
+        display: none !important;
+    }
+}
+
+/* ===== RESPONSIVE PARA DIFERENTES ANCHOS ===== */
+@media screen and (max-width: 360px) {
+    .nav__language-name {
+        display: none !important;
+    }
+    
+    .nav__language-option {
+        gap: 0 !important;
+        justify-content: center !important;
+    }
+}
+
+/* ===== OPTIMIZACIONES DE ACCESIBILIDAD ===== */
+.nav__language-option:focus {
+    outline: 2px solid var(--starflex-red) !important;
+    outline-offset: 2px !important;
+    box-shadow: 
+        0 0 0 4px rgba(255, 45, 85, 0.3),
+        0 8px 20px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* ===== MODO OSCURO ===== */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --language-bg: linear-gradient(135deg, 
+            rgba(255, 45, 85, 0.06) 0%,
+            rgba(255, 255, 255, 0.03) 30%,
+            rgba(30, 35, 48, 0.9) 70%,
+            rgba(21, 25, 34, 0.95) 100%
+        );
+    }
+    
+    .nav__language-option {
+        background: rgba(255, 255, 255, 0.05) !important;
+        border-color: rgba(255, 255, 255, 0.1) !important;
+    }
+}
+
+/* ===== ALTO CONTRASTE ===== */
+@media (prefers-contrast: high) {
+    .nav__language-mobile {
+        border-width: 2px !important;
+    }
+    
+    .nav__language-option {
+        border-width: 2px !important;
+    }
+    
+    .nav__language-title {
+        text-shadow: none !important;
+        font-weight: 800 !important;
+    }
+}
+
+/* ===== MOVIMIENTO REDUCIDO ===== */
+@media (prefers-reduced-motion: reduce) {
+    .nav__language-mobile::before,
+    .nav__language-option::before,
+    .nav__language-option::after {
+        transition: none !important;
+    }
+    
+    .nav__menu.active .nav__language-mobile {
+        animation: none !important;
+    }
+    
+    .nav__language-mobile,
+    .nav__language-option,
+    .nav__language-flag,
+    .nav__language-name {
+        transition: all 0.2s ease !important;
+    }
+    
+    .nav__language-option:hover,
+    .nav__language-option:active {
+        transform: none !important;
+    }
+}
+
+/* ===== OPTIMIZACIONES DE RENDIMIENTO ===== */
+.nav__language-mobile,
+.nav__language-option {
+    will-change: transform !important;
+    transform: translateZ(0) !important;
+    backface-visibility: hidden !important;
+    contain: layout style paint !important;
+}
+
+/* ===== TOUCH OPTIMIZATIONS ===== */
+.nav__language-option {
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-touch-callout: none !important;
+    user-select: none !important;
+}
+
+/* Feedback táctil mejorado */
+.nav__language-option:active {
+    transform: translateY(-1px) scale(0.98) !important;
+}
+
+}
+
+/* ===== NOTA FINAL ===== */
+/*
+🎨 SELECTOR DE IDIOMA DEL DRAWER MÓVIL 100% MEJORADO:
+
+✅ SIGUE LA LÍNEA DEL DRAWER:
+- Misma paleta de colores y gradientes
+- Efectos de brillo consistentes
+- Bordes y sombras armoniosos
+- Transiciones suaves y naturales
+
+✅ SIN ROMPER EFECTOS:
+- Mantiene todos los efectos existentes
+- Animaciones que complementan el drawer
+- Estados hover coherentes
+- Feedback táctil apropiado
+
+✅ DISEÑO PERFECTO:
+- Layout que evita superposiciones
+- Responsive en todas las pantallas
+- Accesibilidad completa
+- Optimización de rendimiento
+
+✅ CARACTERÍSTICAS:
+- Efecto de línea inferior animada
+- Brillo deslizante en hover
+- Estados activos destacados
+- Banderas y texto escalables
+- Animación de entrada fluida
+
+El resultado es un selector de idioma que se integra perfectamente
+con el drawer móvil, manteniendo la coherencia visual y funcional.
+*/
+/* ===== SELECTOR DE IDIOMA INTEGRADO DIRECTAMENTE EN EL DRAWER ===== */
+/* Sin contenedor separado, integrado naturalmente en el flujo del drawer */
+
+/* Aplicar solo en dispositivos móviles */
+@media screen and (max-width: 1023px) {
+
+/* ===== VARIABLES PARA INTEGRACIÓN PERFECTA ===== */
+:root {
+    /* Espaciado que sigue el flujo natural del drawer */
+    --language-spacing: clamp(0.75rem, 2.5vh, 1.25rem);
+    --language-element-height: clamp(40px, 8vh, 48px);
+    
+    /* Colores que se integran perfectamente */
+    --language-text-color: var(--starflex-red);
+    --language-option-bg: rgba(255, 255, 255, 0.08);
+    --language-option-border: rgba(255, 255, 255, 0.15);
+    --language-option-hover: rgba(255, 45, 85, 0.15);
+    --language-option-active: rgba(255, 45, 85, 0.25);
+}
+
+/* ===== ELIMINAR EL CONTENEDOR VISUAL DEL SELECTOR DE IDIOMA ===== */
+.nav__language-mobile {
+    /* Mantener funcionalidad pero eliminar apariencia de contenedor */
+    width: 100% !important;
+    margin: 0 0 var(--language-spacing) 0 !important;
+    padding: 0 !important;
+    
+    /* Espacio para el botón de cerrar */
+    margin-top: calc(50px + var(--language-spacing)) !important;
+    
+    /* ELIMINAR COMPLETAMENTE LA APARIENCIA DE CONTENEDOR */
+    background: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    
+    /* Sin efectos de contenedor */
+    position: relative !important;
+    overflow: visible !important;
+    flex-shrink: 0 !important;
+    box-sizing: border-box !important;
+}
+
+/* Eliminar cualquier pseudo-elemento del contenedor */
+.nav__language-mobile::before,
+.nav__language-mobile::after {
+    display: none !important;
+    content: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+}
+
+/* ===== TÍTULO INTEGRADO NATURALMENTE ===== */
+.nav__language-title {
+    /* Tipografía que se integra con el drawer */
+    color: var(--language-text-color) !important;
+    font-size: clamp(0.75rem, 2.5vw, 0.9rem) !important;
+    font-weight: 600 !important;
+    text-align: center !important;
+    margin-bottom: var(--language-spacing) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    
+    /* Efecto sutil que complementa el drawer */
+    text-shadow: 0 0 8px rgba(255, 45, 85, 0.3) !important;
+    
+    /* Sin contenedor, integrado naturalmente */
+    background: none !important;
+    border: none !important;
+    padding: 0 !important;
+    
+    /* Transición suave */
+    transition: all 0.3s ease !important;
+    
+    /* Posicionamiento natural */
+    position: relative !important;
+    z-index: 1 !important;
+}
+
+/* ===== OPCIONES DE IDIOMA INTEGRADAS COMO ELEMENTOS DEL DRAWER ===== */
+.nav__language-options {
+    /* Layout que sigue el flujo del drawer */
+    display: flex !important;
+    gap: var(--language-spacing) !important;
+    width: 100% !important;
+    margin: 0 0 calc(var(--language-spacing) * 1.5) 0 !important;
+    padding: 0 !important;
+    
+    /* Sin contenedor padre visible */
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    
+    /* Integración natural */
+    position: relative !important;
+    z-index: 1 !important;
+}
+
+/* ===== BOTONES DE IDIOMA COMO ELEMENTOS NATURALES DEL DRAWER ===== */
+.nav__language-option {
+    /* Layout que sigue el estilo de los enlaces del drawer */
+    flex: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.5rem !important;
+    
+    /* Tamaño que se integra con otros elementos */
+    padding: clamp(0.75rem, 3vh, 1rem) clamp(0.75rem, 3vw, 1.25rem) !important;
+    min-height: var(--language-element-height) !important;
+    
+    /* Diseño que sigue la línea de los enlaces del drawer */
+    background: var(--language-option-bg) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border: 1px solid var(--language-option-border) !important;
+    border-radius: 12px !important;
+    
+    /* Tipografía consistente con el drawer */
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-size: clamp(0.75rem, 2.5vw, 0.85rem) !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    
+    /* Interactividad que sigue el patrón del drawer */
+    cursor: pointer !important;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+    
+    /* Sombras sutiles como otros elementos */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    
+    /* Optimización */
+    position: relative !important;
+    overflow: hidden !important;
+    user-select: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+    touch-action: manipulation !important;
+}
+
+/* Efecto lateral que sigue el estilo de los enlaces del drawer */
+.nav__language-option::before {
+    content: '' !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 0 !important;
+    height: 100% !important;
+    background: linear-gradient(180deg, 
+        var(--starflex-red) 0%, 
+        rgba(255, 45, 85, 0.8) 100%
+    ) !important;
+    transition: width 0.3s ease !important;
+    border-radius: 12px 0 0 12px !important;
+    display: block !important;
+    opacity: 1 !important;
+}
+
+/* Efecto de brillo que complementa el drawer */
+.nav__language-option::after {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: -100% !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(255, 45, 85, 0.1) 50%, 
+        transparent 100%
+    ) !important;
+    transition: left 0.6s ease !important;
+    border-radius: 12px !important;
+    display: block !important;
+    opacity: 1 !important;
+}
+
+/* ===== ESTADOS HOVER QUE SIGUEN EL PATRÓN DEL DRAWER ===== */
+.nav__language-option:hover,
+.nav__language-option:active {
+    /* Transformación similar a los enlaces del drawer */
+    background: var(--language-option-hover) !important;
+    border-color: rgba(255, 45, 85, 0.4) !important;
+    color: #ffffff !important;
+    transform: translateY(-1px) scale(1.02) !important;
+    
+    /* Sombras mejoradas */
+    box-shadow: 
+        0 6px 20px rgba(0, 0, 0, 0.2),
+        0 0 15px rgba(255, 45, 85, 0.3) !important;
+}
+
+.nav__language-option:hover::before,
+.nav__language-option:active::before {
+    width: 3px !important;
+}
+
+.nav__language-option:hover::after,
+.nav__language-option:active::after {
+    left: 100% !important;
+}
+
+/* ===== ESTADO ACTIVO QUE DESTACA COMO LOS ENLACES ACTIVOS ===== */
+.nav__language-option.active {
+    /* Estilo activo similar a .nav__link.active */
+    background: var(--language-option-active) !important;
+    border-color: rgba(255, 45, 85, 0.6) !important;
+    color: var(--starflex-red) !important;
+    
+    /* Sombras especiales */
+    box-shadow: 
+        0 6px 20px rgba(0, 0, 0, 0.25),
+        0 0 20px rgba(255, 45, 85, 0.4) !important;
+    
+    /* Efecto de texto */
+    text-shadow: 0 0 8px rgba(255, 45, 85, 0.5) !important;
+}
+
+.nav__language-option.active::before {
+    width: 3px !important;
+    background: linear-gradient(180deg, 
+        var(--starflex-red) 0%, 
+        rgba(255, 45, 85, 1) 100%
+    ) !important;
+    box-shadow: 0 0 8px rgba(255, 45, 85, 0.6) !important;
+}
+
+/* ===== BANDERAS Y TEXTO OPTIMIZADOS ===== */
+.nav__language-flag {
+    font-size: 1rem !important;
+    line-height: 1 !important;
+    transition: transform 0.3s ease !important;
+}
+
+.nav__language-name {
+    font-weight: 700 !important;
+    transition: transform 0.3s ease !important;
+}
+
+.nav__language-option:hover .nav__language-flag,
+.nav__language-option:hover .nav__language-name {
+    transform: scale(1.05) !important;
+}
+
+.nav__language-option.active .nav__language-flag,
+.nav__language-option.active .nav__language-name {
+    transform: scale(1.1) !important;
+}
+
+/* ===== INTEGRACIÓN PERFECTA CON LAS ANIMACIONES DEL DRAWER ===== */
+.nav__menu.active .nav__language-title {
+    animation: drawerElementSlideIn 0.5s ease-out 0.1s both;
+}
+
+.nav__menu.active .nav__language-options {
+    animation: drawerElementSlideIn 0.5s ease-out 0.15s both;
+}
+
+/* Asegurar que los enlaces sigan después del selector de idioma */
+.nav__menu.active .nav__link:nth-child(1) { animation-delay: 0.25s; }
+.nav__menu.active .nav__link:nth-child(2) { animation-delay: 0.3s; }
+.nav__menu.active .nav__link:nth-child(3) { animation-delay: 0.35s; }
+.nav__menu.active .nav__link:nth-child(4) { animation-delay: 0.4s; }
+.nav__menu.active .nav__link:nth-child(5) { animation-delay: 0.45s; }
+
+.nav__menu.active .btn--mobile {
+    animation: drawerElementSlideIn 0.5s ease-out 0.5s both;
+}
+
+@keyframes drawerElementSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* ===== RESPONSIVE QUE MANTIENE LA INTEGRACIÓN ===== */
+
+/* Pantallas medianas */
+@media screen and (max-height: 700px) and (min-height: 600px) {
+    .nav__language-mobile {
+        margin-top: calc(45px + var(--language-spacing)) !important;
+    }
+    
+    .nav__language-title {
+        font-size: clamp(0.7rem, 2.2vw, 0.85rem) !important;
+    }
+    
+    .nav__language-option {
+        padding: clamp(0.625rem, 2.5vh, 0.875rem) clamp(0.625rem, 2.5vw, 1rem) !important;
+        min-height: 40px !important;
+    }
+}
+
+/* Pantallas pequeñas */
+@media screen and (max-height: 600px) {
+    .nav__language-mobile {
+        margin-top: calc(40px + var(--language-spacing)) !important;
+    }
+    
+    .nav__language-title {
+        font-size: clamp(0.65rem, 2vw, 0.8rem) !important;
+        margin-bottom: calc(var(--language-spacing) * 0.75) !important;
+    }
+    
+    .nav__language-option {
+        padding: clamp(0.5rem, 2vh, 0.75rem) clamp(0.5rem, 2vw, 0.875rem) !important;
+        min-height: 36px !important;
+        font-size: clamp(0.7rem, 2.2vw, 0.8rem) !important;
+    }
+}
+
+/* Pantallas muy pequeñas */
+@media screen and (max-height: 500px) {
+    .nav__language-mobile {
+        margin-top: calc(35px + var(--language-spacing)) !important;
+    }
+    
+    .nav__language-title {
+        font-size: clamp(0.6rem, 1.8vw, 0.75rem) !important;
+        margin-bottom: calc(var(--language-spacing) * 0.5) !important;
+    }
+    
+    .nav__language-option {
+        padding: clamp(0.375rem, 1.5vh, 0.625rem) clamp(0.375rem, 1.5vw, 0.75rem) !important;
+        min-height: 32px !important;
+        font-size: clamp(0.65rem, 2vw, 0.75rem) !important;
+    }
+    
+    .nav__language-name {
+        display: none !important;
+    }
+}
+
+/* Pantallas estrechas */
+@media screen and (max-width: 360px) {
+    .nav__language-name {
+        display: none !important;
+    }
+    
+    .nav__language-option {
+        gap: 0 !important;
+        justify-content: center !important;
+    }
+}
+
+/* ===== OPTIMIZACIONES DE ACCESIBILIDAD ===== */
+.nav__language-option:focus {
+    outline: 2px solid var(--starflex-red) !important;
+    outline-offset: 2px !important;
+    box-shadow: 
+        0 0 0 4px rgba(255, 45, 85, 0.3),
+        0 6px 20px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* ===== MODO OSCURO ===== */
+@media (prefers-color-scheme: dark) {
+    .nav__language-option {
+        background: rgba(255, 255, 255, 0.05) !important;
+        border-color: rgba(255, 255, 255, 0.1) !important;
+    }
+}
+
+/* ===== ALTO CONTRASTE ===== */
+@media (prefers-contrast: high) {
+    .nav__language-option {
+        border-width: 2px !important;
+    }
+    
+    .nav__language-title {
+        text-shadow: none !important;
+        font-weight: 800 !important;
+    }
+}
+
+/* ===== MOVIMIENTO REDUCIDO ===== */
+@media (prefers-reduced-motion: reduce) {
+    .nav__language-option::before,
+    .nav__language-option::after {
+        transition: none !important;
+    }
+    
+    .nav__menu.active .nav__language-title,
+    .nav__menu.active .nav__language-options {
+        animation: none !important;
+    }
+    
+    .nav__language-option,
+    .nav__language-flag,
+    .nav__language-name {
+        transition: all 0.2s ease !important;
+    }
+    
+    .nav__language-option:hover,
+    .nav__language-option:active {
+        transform: none !important;
+    }
+}
+
+/* ===== OPTIMIZACIONES DE RENDIMIENTO ===== */
+.nav__language-option {
+    will-change: transform !important;
+    transform: translateZ(0) !important;
+    backface-visibility: hidden !important;
+    contain: layout style paint !important;
+}
+
+/* ===== TOUCH OPTIMIZATIONS ===== */
+.nav__language-option {
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-touch-callout: none !important;
+    user-select: none !important;
+}
+
+/* Feedback táctil */
+.nav__language-option:active {
+    transform: translateY(0) scale(0.98) !important;
+}
+
+}
+
+/* ===== NOTA FINAL ===== */
+/*
+🎨 SELECTOR DE IDIOMA INTEGRADO PERFECTAMENTE EN EL DRAWER:
+
+✅ SIN CONTENEDOR VISUAL:
+- Contenedor funcional mantenido pero sin apariencia
+- Fondo, bordes y sombras eliminados completamente
+- Elementos integrados naturalmente en el flujo del drawer
+
+✅ ESTÉTICA INTEGRADA:
+- Título que sigue la tipografía del drawer
+- Opciones que parecen elementos naturales del menú
+- Efectos laterales como los enlaces de navegación
+- Colores y espaciado consistentes
+
+✅ FUNCIONALIDAD COMPLETA:
+- Toda la funcionalidad JavaScript mantenida
+- Animaciones que siguen el patrón del drawer
+- Estados hover y activo coherentes
+- Responsive perfecto en todas las pantallas
+
+✅ OPTIMIZACIÓN:
+- Rendimiento mantenido
+- Accesibilidad completa
+- Touch optimizations
+- Movimiento reducido soportado
+
+El resultado es un selector de idioma que se ve como parte natural
+del drawer, sin contenedor visible, pero manteniendo toda su
+funcionalidad y siguiendo perfectamente la estética del menú.
+*/
+/* ===== ELIMINAR HOVER DEL CONTENEDOR DEL SELECTOR DE IDIOMA ===== */
+/* Solo los botones individuales tendrán hover, no el contenedor */
+
+/* Aplicar solo en dispositivos móviles */
+@media screen and (max-width: 1023px) {
+
+/* ===== CONTENEDOR SIN EFECTOS HOVER ===== */
+.nav__language-mobile {
+    /* Mantener funcionalidad pero SIN EFECTOS HOVER */
+    width: 100% !important;
+    margin: 0 0 var(--language-spacing, 1rem) 0 !important;
+    padding: 0 !important;
+    
+    /* Espacio para el botón de cerrar */
+    margin-top: calc(50px + var(--language-spacing, 1rem)) !important;
+    
+    /* COMPLETAMENTE INVISIBLE COMO CONTENEDOR */
+    background: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    
+    /* SIN TRANSICIONES NI EFECTOS HOVER */
+    transition: none !important;
+    
+    /* Layout invisible */
+    position: relative !important;
+    overflow: visible !important;
+    flex-shrink: 0 !important;
+    box-sizing: border-box !important;
+    
+    /* IMPORTANTE: Sin cursor pointer para evitar sensación de clickeable */
+    cursor: default !important;
+    pointer-events: none !important;
+}
+
+/* ELIMINAR COMPLETAMENTE TODOS LOS PSEUDO-ELEMENTOS Y EFECTOS */
+.nav__language-mobile::before,
+.nav__language-mobile::after {
+    display: none !important;
+    content: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+/* ELIMINAR CUALQUIER ESTADO HOVER DEL CONTENEDOR */
+.nav__language-mobile:hover,
+.nav__language-mobile:active,
+.nav__language-mobile:focus {
+    /* NINGÚN EFECTO EN EL CONTENEDOR */
+    background: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    transform: none !important;
+    filter: none !important;
+    opacity: 1 !important;
+    
+    /* Sin cambios visuales */
+    transition: none !important;
+}
+
+/* ELIMINAR HOVER DE PSEUDO-ELEMENTOS DEL CONTENEDOR */
+.nav__language-mobile:hover::before,
+.nav__language-mobile:hover::after,
+.nav__language-mobile:active::before,
+.nav__language-mobile:active::after,
+.nav__language-mobile:focus::before,
+.nav__language-mobile:focus::after {
+    display: none !important;
+    content: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    left: -9999px !important;
+    animation: none !important;
+    transition: none !important;
+}
+
+/* ===== TÍTULO SIN EFECTOS HOVER ===== */
+.nav__language-title {
+    /* Tipografía estática */
+    color: var(--starflex-red) !important;
+    font-size: clamp(0.75rem, 2.5vw, 0.9rem) !important;
+    font-weight: 600 !important;
+    text-align: center !important;
+    margin-bottom: var(--language-spacing, 1rem) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    
+    /* Efecto de texto estático */
+    text-shadow: 0 0 8px rgba(255, 45, 85, 0.3) !important;
+    
+    /* Sin contenedor, sin efectos */
+    background: none !important;
+    border: none !important;
+    padding: 0 !important;
+    
+    /* SIN TRANSICIONES */
+    transition: none !important;
+    
+    /* Layout estático */
+    position: relative !important;
+    z-index: 1 !important;
+    
+    /* Sin cursor pointer */
+    cursor: default !important;
+    pointer-events: none !important;
+}
+
+/* ELIMINAR HOVER DEL TÍTULO */
+.nav__language-title:hover,
+.nav__language-title:active,
+.nav__language-title:focus {
+    /* MANTENER EXACTAMENTE IGUAL */
+    color: var(--starflex-red) !important;
+    text-shadow: 0 0 8px rgba(255, 45, 85, 0.3) !important;
+    transform: none !important;
+    filter: none !important;
+    opacity: 1 !important;
+}
+
+/* ===== CONTENEDOR DE OPCIONES SIN HOVER ===== */
+.nav__language-options {
+    /* Layout invisible */
+    display: flex !important;
+    gap: var(--language-spacing, 1rem) !important;
+    width: 100% !important;
+    margin: 0 0 calc(var(--language-spacing, 1rem) * 1.5) 0 !important;
+    padding: 0 !important;
+    
+    /* Completamente invisible como contenedor */
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    
+    /* Sin efectos */
+    transition: none !important;
+    
+    /* Layout estático */
+    position: relative !important;
+    z-index: 1 !important;
+    
+    /* Sin interactividad del contenedor */
+    cursor: default !important;
+    pointer-events: none !important;
+}
+
+/* ELIMINAR HOVER DEL CONTENEDOR DE OPCIONES */
+.nav__language-options:hover,
+.nav__language-options:active,
+.nav__language-options:focus {
+    /* MANTENER EXACTAMENTE IGUAL */
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    transform: none !important;
+    filter: none !important;
+    opacity: 1 !important;
+}
+
+/* ===== SOLO LOS BOTONES INDIVIDUALES TIENEN HOVER ===== */
+.nav__language-option {
+    /* Layout que sigue el estilo del drawer */
+    flex: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.5rem !important;
+    
+    /* Tamaño optimizado */
+    padding: clamp(0.75rem, 3vh, 1rem) clamp(0.75rem, 3vw, 1.25rem) !important;
+    min-height: var(--language-element-height, 44px) !important;
+    
+    /* Diseño integrado */
+    background: rgba(255, 255, 255, 0.08) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 12px !important;
+    
+    /* Tipografía */
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-size: clamp(0.75rem, 2.5vw, 0.85rem) !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    
+    /* SOLO ESTOS BOTONES TIENEN INTERACTIVIDAD */
+    cursor: pointer !important;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+    
+    /* Sombras sutiles */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    
+    /* Optimización */
+    position: relative !important;
+    overflow: hidden !important;
+    user-select: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+    touch-action: manipulation !important;
+    
+    /* IMPORTANTE: Reactivar pointer-events solo para los botones */
+    pointer-events: auto !important;
+}
+
+/* Efectos solo en los botones individuales */
+.nav__language-option::before {
+    content: '' !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 0 !important;
+    height: 100% !important;
+    background: linear-gradient(180deg, 
+        var(--starflex-red) 0%, 
+        rgba(255, 45, 85, 0.8) 100%
+    ) !important;
+    transition: width 0.3s ease !important;
+    border-radius: 12px 0 0 12px !important;
+    display: block !important;
+    opacity: 1 !important;
+}
+
+.nav__language-option::after {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: -100% !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(255, 45, 85, 0.1) 50%, 
+        transparent 100%
+    ) !important;
+    transition: left 0.6s ease !important;
+    border-radius: 12px !important;
+    display: block !important;
+    opacity: 1 !important;
+}
+
+/* ===== HOVER SOLO EN LOS BOTONES INDIVIDUALES ===== */
+.nav__language-option:hover,
+.nav__language-option:active {
+    /* Solo los botones cambian */
+    background: rgba(255, 45, 85, 0.15) !important;
+    border-color: rgba(255, 45, 85, 0.4) !important;
+    color: #ffffff !important;
+    transform: translateY(-1px) scale(1.02) !important;
+    
+    /* Sombras mejoradas */
+    box-shadow: 
+        0 6px 20px rgba(0, 0, 0, 0.2),
+        0 0 15px rgba(255, 45, 85, 0.3) !important;
+}
+
+.nav__language-option:hover::before,
+.nav__language-option:active::before {
+    width: 3px !important;
+}
+
+.nav__language-option:hover::after,
+.nav__language-option:active::after {
+    left: 100% !important;
+}
+
+/* ===== ESTADO ACTIVO SOLO EN BOTONES ===== */
+.nav__language-option.active {
+    background: rgba(255, 45, 85, 0.25) !important;
+    border-color: rgba(255, 45, 85, 0.6) !important;
+    color: var(--starflex-red) !important;
+    
+    box-shadow: 
+        0 6px 20px rgba(0, 0, 0, 0.25),
+        0 0 20px rgba(255, 45, 85, 0.4) !important;
+    
+    text-shadow: 0 0 8px rgba(255, 45, 85, 0.5) !important;
+}
+
+.nav__language-option.active::before {
+    width: 3px !important;
+    background: linear-gradient(180deg, 
+        var(--starflex-red) 0%, 
+        rgba(255, 45, 85, 1) 100%
+    ) !important;
+    box-shadow: 0 0 8px rgba(255, 45, 85, 0.6) !important;
+}
+
+/* ===== BANDERAS Y TEXTO ===== */
+.nav__language-flag {
+    font-size: 1rem !important;
+    line-height: 1 !important;
+    transition: transform 0.3s ease !important;
+    pointer-events: none !important;
+}
+
+.nav__language-name {
+    font-weight: 700 !important;
+    transition: transform 0.3s ease !important;
+    pointer-events: none !important;
+}
+
+.nav__language-option:hover .nav__language-flag,
+.nav__language-option:hover .nav__language-name {
+    transform: scale(1.05) !important;
+}
+
+.nav__language-option.active .nav__language-flag,
+.nav__language-option.active .nav__language-name {
+    transform: scale(1.1) !important;
+}
+
+/* ===== ANIMACIONES MANTENIDAS ===== */
+.nav__menu.active .nav__language-title {
+    animation: drawerElementSlideIn 0.5s ease-out 0.1s both;
+}
+
+.nav__menu.active .nav__language-options {
+    animation: drawerElementSlideIn 0.5s ease-out 0.15s both;
+}
+
+@keyframes drawerElementSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* ===== RESPONSIVE MANTENIDO ===== */
+@media screen and (max-height: 600px) {
+    .nav__language-mobile {
+        margin-top: calc(40px + var(--language-spacing, 1rem)) !important;
+    }
+    
+    .nav__language-option {
+        min-height: 36px !important;
+    }
+}
+
+@media screen and (max-height: 500px) {
+    .nav__language-name {
+        display: none !important;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    .nav__language-name {
+        display: none !important;
+    }
+}
+
+/* ===== ACCESIBILIDAD SOLO EN BOTONES ===== */
+.nav__language-option:focus {
+    outline: 2px solid var(--starflex-red) !important;
+    outline-offset: 2px !important;
+    box-shadow: 
+        0 0 0 4px rgba(255, 45, 85, 0.3),
+        0 6px 20px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* ===== MOVIMIENTO REDUCIDO ===== */
+@media (prefers-reduced-motion: reduce) {
+    .nav__language-mobile,
+    .nav__language-title,
+    .nav__language-options {
+        transition: none !important;
+    }
+    
+    .nav__language-option:hover,
+    .nav__language-option:active {
+        transform: none !important;
+    }
+}
+
+/* ===== OPTIMIZACIÓN FINAL ===== */
+.nav__language-option {
+    will-change: transform !important;
+    transform: translateZ(0) !important;
+    backface-visibility: hidden !important;
+    contain: layout style paint !important;
+}
+
+}
+
+/* ===== NOTA FINAL ===== */
+/*
+🎯 HOVER DEL CONTENEDOR COMPLETAMENTE ELIMINADO:
+
+✅ SIN HOVER EN CONTENEDOR:
+- .nav__language-mobile sin efectos hover
+- .nav__language-title sin efectos hover  
+- .nav__language-options sin efectos hover
+- pointer-events: none en contenedores
+
+✅ HOVER SOLO EN BOTONES:
+- Solo .nav__language-option tiene hover
+- pointer-events: auto solo en botones
+- Efectos visuales solo en elementos clickeables
+
+✅ ZONA SIN ENNEGRECIMIENTO:
+- No hay cambios visuales al pasar ratón por el área
+- Solo los botones individuales reaccionan
+- Contenedor completamente invisible al hover
+
+✅ FUNCIONALIDAD MANTENIDA:
+- JavaScript sigue funcionando igual
+- Botones individuales mantienen toda su interactividad
+- Animaciones y responsive mantenidos
+
+Ahora cuando pases el ratón por la zona del selector de idioma,
+no se ennegrece ni cambia nada. Solo los botones individuales
+de idioma reaccionan al hover.
+*/
+/* ===== BOTONES DEL SELECTOR DE IDIOMA OPTIMIZADOS Y COMPACTOS ===== */
+/* Tamaño perfecto que no se corta en ninguna pantalla */
+
+/* Aplicar solo en dispositivos móviles */
+@media screen and (max-width: 1023px) {
+
+/* ===== VARIABLES PARA BOTONES COMPACTOS ===== */
+:root {
+    /* Tamaños optimizados para botones compactos */
+    --language-button-height: clamp(36px, 6vh, 42px);
+    --language-button-padding-v: clamp(0.5rem, 2vh, 0.75rem);
+    --language-button-padding-h: clamp(0.75rem, 3vw, 1rem);
+    --language-button-gap: clamp(0.375rem, 1.5vw, 0.5rem);
+    --language-button-font: clamp(0.7rem, 2.2vw, 0.8rem);
+    --language-spacing-compact: clamp(0.75rem, 2vh, 1rem);
+}
+
+/* ===== CONTENEDOR DE OPCIONES COMPACTO ===== */
+.nav__language-options {
+    /* Layout compacto */
+    display: flex !important;
+    gap: var(--language-spacing-compact) !important;
+    width: 100% !important;
+    margin: 0 0 calc(var(--language-spacing-compact) * 1.5) 0 !important;
+    padding: 0 !important;
+    
+    /* Sin contenedor visible */
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    transition: none !important;
+    
+    /* Layout que previene cortes */
+    position: relative !important;
+    z-index: 1 !important;
+    cursor: default !important;
+    pointer-events: none !important;
+    
+    /* Asegurar que no se desborde */
+    overflow: visible !important;
+    box-sizing: border-box !important;
+}
+
+/* ===== BOTONES COMPACTOS Y OPTIMIZADOS ===== */
+.nav__language-option {
+    /* Layout compacto que no se corta */
+    flex: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: var(--language-button-gap) !important;
+    
+    /* Tamaño compacto optimizado */
+    padding: var(--language-button-padding-v) var(--language-button-padding-h) !important;
+    min-height: var(--language-button-height) !important;
+    max-height: var(--language-button-height) !important;
+    
+    /* Diseño compacto */
+    background: rgba(255, 255, 255, 0.08) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 10px !important;
+    
+    /* Tipografía compacta */
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-size: var(--language-button-font) !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    line-height: 1.2 !important;
+    
+    /* Interactividad suave */
+    cursor: pointer !important;
+    transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+    
+    /* Sombras sutiles */
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12) !important;
+    
+    /* Optimización que previene cortes */
+    position: relative !important;
+    overflow: hidden !important;
+    user-select: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+    touch-action: manipulation !important;
+    pointer-events: auto !important;
+    
+    /* Asegurar que no se desborde */
+    box-sizing: border-box !important;
+    white-space: nowrap !important;
+    
+    /* Límites para prevenir cortes */
+    min-width: 0 !important;
+    max-width: 100% !important;
+}
+
+/* Efecto lateral compacto */
+.nav__language-option::before {
+    content: '' !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 0 !important;
+    height: 100% !important;
+    background: linear-gradient(180deg, 
+        var(--starflex-red) 0%, 
+        rgba(255, 45, 85, 0.8) 100%
+    ) !important;
+    transition: width 0.25s ease !important;
+    border-radius: 10px 0 0 10px !important;
+    display: block !important;
+    opacity: 1 !important;
+}
+
+/* Efecto de brillo compacto */
+.nav__language-option::after {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: -100% !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(255, 45, 85, 0.08) 50%, 
+        transparent 100%
+    ) !important;
+    transition: left 0.5s ease !important;
+    border-radius: 10px !important;
+    display: block !important;
+    opacity: 1 !important;
+}
+
+/* ===== HOVER COMPACTO Y SUTIL ===== */
+.nav__language-option:hover,
+.nav__language-option:active {
+    /* Transformación sutil */
+    background: rgba(255, 45, 85, 0.12) !important;
+    border-color: rgba(255, 45, 85, 0.3) !important;
+    color: #ffffff !important;
+    transform: translateY(-1px) scale(1.01) !important;
+    
+    /* Sombras mejoradas pero sutiles */
+    box-shadow: 
+        0 5px 15px rgba(0, 0, 0, 0.18),
+        0 0 12px rgba(255, 45, 85, 0.25) !important;
+}
+
+.nav__language-option:hover::before,
+.nav__language-option:active::before {
+    width: 2px !important;
+}
+
+.nav__language-option:hover::after,
+.nav__language-option:active::after {
+    left: 100% !important;
+}
+
+/* ===== ESTADO ACTIVO COMPACTO ===== */
+.nav__language-option.active {
+    background: rgba(255, 45, 85, 0.2) !important;
+    border-color: rgba(255, 45, 85, 0.5) !important;
+    color: var(--starflex-red) !important;
+    
+    box-shadow: 
+        0 5px 15px rgba(0, 0, 0, 0.2),
+        0 0 15px rgba(255, 45, 85, 0.35) !important;
+    
+    text-shadow: 0 0 6px rgba(255, 45, 85, 0.4) !important;
+}
+
+.nav__language-option.active::before {
+    width: 2px !important;
+    background: linear-gradient(180deg, 
+        var(--starflex-red) 0%, 
+        rgba(255, 45, 85, 1) 100%
+    ) !important;
+    box-shadow: 0 0 6px rgba(255, 45, 85, 0.5) !important;
+}
+
+/* ===== BANDERAS Y TEXTO COMPACTOS ===== */
+.nav__language-flag {
+    font-size: clamp(0.85rem, 2.5vw, 0.95rem) !important;
+    line-height: 1 !important;
+    transition: transform 0.25s ease !important;
+    pointer-events: none !important;
+    flex-shrink: 0 !important;
+}
+
+.nav__language-name {
+    font-weight: 700 !important;
+    transition: transform 0.25s ease !important;
+    pointer-events: none !important;
+    
+    /* Prevenir cortes de texto */
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    min-width: 0 !important;
+}
+
+.nav__language-option:hover .nav__language-flag,
+.nav__language-option:hover .nav__language-name {
+    transform: scale(1.03) !important;
+}
+
+.nav__language-option.active .nav__language-flag,
+.nav__language-option.active .nav__language-name {
+    transform: scale(1.05) !important;
+}
+
+/* ===== RESPONSIVE ULTRA OPTIMIZADO PARA PREVENIR CORTES ===== */
+
+/* Pantallas muy altas - botones más grandes */
+@media screen and (min-height: 800px) {
+    :root {
+        --language-button-height: 44px;
+        --language-button-padding-v: 0.75rem;
+        --language-button-padding-h: 1.125rem;
+        --language-button-font: 0.8rem;
+    }
+}
+
+/* Pantallas medianas */
+@media screen and (max-height: 700px) and (min-height: 600px) {
+    :root {
+        --language-button-height: 40px;
+        --language-button-padding-v: 0.625rem;
+        --language-button-padding-h: 1rem;
+        --language-button-font: 0.75rem;
+    }
+}
+
+/* Pantallas pequeñas */
+@media screen and (max-height: 600px) {
+    :root {
+        --language-button-height: 36px;
+        --language-button-padding-v: 0.5rem;
+        --language-button-padding-h: 0.875rem;
+        --language-button-font: 0.7rem;
+        --language-spacing-compact: 0.75rem;
+    }
+    
+    .nav__language-option {
+        border-radius: 8px !important;
+    }
+    
+    .nav__language-option::before {
+        border-radius: 8px 0 0 8px !important;
+    }
+    
+    .nav__language-option::after {
+        border-radius: 8px !important;
+    }
+}
+
+/* Pantallas muy pequeñas */
+@media screen and (max-height: 500px) {
+    :root {
+        --language-button-height: 32px;
+        --language-button-padding-v: 0.375rem;
+        --language-button-padding-h: 0.75rem;
+        --language-button-font: 0.65rem;
+        --language-button-gap: 0.25rem;
+        --language-spacing-compact: 0.5rem;
+    }
+    
+    .nav__language-name {
+        display: none !important;
+    }
+    
+    .nav__language-option {
+        border-radius: 6px !important;
+        justify-content: center !important;
+        gap: 0 !important;
+    }
+    
+    .nav__language-option::before {
+        border-radius: 6px 0 0 6px !important;
+    }
+    
+    .nav__language-option::after {
+        border-radius: 6px !important;
+    }
+}
+
+/* Pantallas extremadamente pequeñas */
+@media screen and (max-height: 450px) {
+    :root {
+        --language-button-height: 28px;
+        --language-button-padding-v: 0.25rem;
+        --language-button-padding-h: 0.625rem;
+        --language-button-font: 0.6rem;
+    }
+}
+
+/* ===== RESPONSIVE PARA ANCHOS ESTRECHOS ===== */
+
+/* Pantallas estrechas */
+@media screen and (max-width: 360px) {
+    :root {
+        --language-button-padding-h: 0.625rem;
+        --language-spacing-compact: 0.625rem;
+    }
+    
+    .nav__language-name {
+        display: none !important;
+    }
+    
+    .nav__language-option {
+        gap: 0 !important;
+        justify-content: center !important;
+    }
+}
+
+/* Pantallas muy estrechas */
+@media screen and (max-width: 320px) {
+    :root {
+        --language-button-padding-h: 0.5rem;
+        --language-spacing-compact: 0.5rem;
+    }
+    
+    .nav__language-options {
+        gap: 0.5rem !important;
+    }
+}
+
+/* ===== OPTIMIZACIONES PARA DISPOSITIVOS ESPECÍFICOS ===== */
+
+/* iPhone SE y similares */
+@media screen and (max-width: 375px) and (max-height: 667px) {
+    :root {
+        --language-button-height: 36px;
+        --language-button-padding-v: 0.5rem;
+        --language-button-padding-h: 0.75rem;
+        --language-button-font: 0.7rem;
+    }
+}
+
+/* Dispositivos muy pequeños */
+@media screen and (max-width: 280px) {
+    :root {
+        --language-button-height: 32px;
+        --language-button-padding-v: 0.375rem;
+        --language-button-padding-h: 0.5rem;
+        --language-button-font: 0.65rem;
+    }
+    
+    .nav__language-options {
+        gap: 0.375rem !important;
+    }
+}
+
+/* ===== ACCESIBILIDAD OPTIMIZADA ===== */
+.nav__language-option:focus {
+    outline: 2px solid var(--starflex-red) !important;
+    outline-offset: 1px !important;
+    box-shadow: 
+        0 0 0 3px rgba(255, 45, 85, 0.3),
+        0 5px 15px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* ===== MODO OSCURO ===== */
+@media (prefers-color-scheme: dark) {
+    .nav__language-option {
+        background: rgba(255, 255, 255, 0.06) !important;
+        border-color: rgba(255, 255, 255, 0.12) !important;
+    }
+}
+
+/* ===== ALTO CONTRASTE ===== */
+@media (prefers-contrast: high) {
+    .nav__language-option {
+        border-width: 2px !important;
+        font-weight: 700 !important;
+    }
+}
+
+/* ===== MOVIMIENTO REDUCIDO ===== */
+@media (prefers-reduced-motion: reduce) {
+    .nav__language-option::before,
+    .nav__language-option::after {
+        transition: none !important;
+    }
+    
+    .nav__language-option,
+    .nav__language-flag,
+    .nav__language-name {
+        transition: all 0.15s ease !important;
+    }
+    
+    .nav__language-option:hover,
+    .nav__language-option:active {
+        transform: none !important;
+    }
+}
+
+/* ===== OPTIMIZACIÓN DE RENDIMIENTO ===== */
+.nav__language-option {
+    will-change: transform !important;
+    transform: translateZ(0) !important;
+    backface-visibility: hidden !important;
+    contain: layout style paint !important;
+}
+
+/* ===== TOUCH OPTIMIZATIONS ===== */
+.nav__language-option {
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-touch-callout: none !important;
+    user-select: none !important;
+}
+
+/* Feedback táctil suave */
+.nav__language-option:active {
+    transform: translateY(0) scale(0.98) !important;
+}
+
+/* ===== PREVENCIÓN DE CORTES ADICIONAL ===== */
+.nav__language-options {
+    /* Asegurar que el contenedor no cause overflow */
+    min-width: 0 !important;
+    max-width: 100% !important;
+    overflow: visible !important;
+}
+
+.nav__language-option {
+    /* Asegurar que los botones no se salgan */
+    min-width: 0 !important;
+    max-width: calc(50% - var(--language-spacing-compact) / 2) !important;
+    flex-basis: 0 !important;
+    flex-grow: 1 !important;
+    flex-shrink: 1 !important;
+}
+
+}
+
+/* ===== NOTA FINAL ===== */
+/*
+🎯 BOTONES DEL SELECTOR COMPACTOS Y SIN CORTES:
+
+✅ TAMAÑO COMPACTO:
+- Altura: 28px-44px según pantalla
+- Padding optimizado para cada tamaño
+- Font-size escalable y legible
+- Bordes redondeados apropiados
+
+✅ SIN CORTES:
+- max-width calculado para prevenir overflow
+- white-space: nowrap en texto
+- text-overflow: ellipsis como fallback
+- flex-shrink para adaptación automática
+
+✅ RESPONSIVE PERFECTO:
+- Variables CSS que escalan según pantalla
+- Ocultación de texto en pantallas pequeñas
+- Espaciado que se adapta automáticamente
+- Soporte para dispositivos específicos
+
+✅ OPTIMIZACIÓN:
+- Efectos hover sutiles
+- Transiciones más rápidas (0.25s)
+- Sombras reducidas
+- Performance mantenido
+
+Los botones ahora son compactos, nunca se cortan y se adaptan
+perfectamente a cualquier tamaño de pantalla manteniendo
+toda la funcionalidad y estética.
+*/

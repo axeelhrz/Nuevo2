@@ -14366,3 +14366,61 @@ Los botones ahora nunca se cortarán en los bordes y se adaptarán
 perfectamente a cualquier tamaño de pantalla manteniendo toda
 su funcionalidad y estética.
 */
+/* ===== OCULTAR LOGO DEL NAVBAR CUANDO DRAWER ESTÁ ACTIVO SIN DIFUMINADO ===== */
+/* El logo del navbar se oculta limpiamente cuando se abre el drawer móvil */
+/* Aplicar solo en dispositivos móviles */
+
+@media screen and (max-width: 1023px) {
+    /* CUANDO EL MENÚ ESTÁ ACTIVO, OCULTAR EL LOGO SIN BLUR */
+    body.no-scroll .nav__brand,
+    .nav__menu.active ~ .nav__brand {
+        /* Ocultar el logo con animación suave SIN difuminado */
+        opacity: 0 !important;
+        visibility: hidden !important;
+        transform: scale(0.8) translateY(-10px) !important;
+        pointer-events: none !important;
+        transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+    }
+
+    body.no-scroll .nav__logo,
+    .nav__menu.active ~ .nav__logo {
+        /* Efectos adicionales para el logo SIN BLUR */
+        opacity: 0 !important;
+        transform: scale(0.8) translateY(-10px) translateZ(0) !important;
+        /* ELIMINAR el filter: blur(2px) para evitar difuminado */
+        filter: none !important;
+    }
+
+    /* ALTERNATIVA: Usar clase específica cuando el menú está abierto */
+    .nav-menu-open .nav__brand {
+        /* Ocultar logo cuando hay clase específica SIN difuminado */
+        opacity: 0 !important;
+        visibility: hidden !important;
+        transform: scale(0.8) translateY(-10px) !important;
+        pointer-events: none !important;
+        transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+    }
+
+    .nav-menu-open .nav__logo {
+        /* Efectos adicionales para el logo SIN BLUR */
+        opacity: 0 !important;
+        transform: scale(0.8) translateY(-10px) translateZ(0) !important;
+        /* ELIMINAR el filter: blur(2px) para evitar difuminado */
+        filter: none !important;
+    }
+
+    /* Asegurar que el logo mantenga transiciones suaves */
+    .nav__brand {
+        transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+        position: relative !important;
+        z-index: calc(var(--navbar-z-index) + 1) !important;
+    }
+
+    .nav__logo {
+        transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+        transform: translateZ(0) !important;
+        backface-visibility: hidden !important;
+        /* Asegurar que no hay filtros por defecto */
+        filter: none !important;
+    }
+}
